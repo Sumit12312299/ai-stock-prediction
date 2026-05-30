@@ -330,13 +330,13 @@ export default function StockAnalysis({
               <div className="h-72 w-full text-xs font-semibold">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={prediction.historical_prices} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" className="dark:stroke-slate-800/40" />
-                    <XAxis dataKey="date" stroke="#94a3b8" />
-                    <YAxis domain={['auto', 'auto']} stroke="#94a3b8" />
-                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '12px', color: '#f8fafc' }} />
-                    <Legend wrapperStyle={{ paddingTop: '15px' }} />
-                    <Line type="monotone" dataKey="actual" name="Actual Price" stroke="#38bdf8" strokeWidth={2.5} dot={false} activeDot={{ r: 6 }} />
-                    <Line type="monotone" dataKey="predicted" name="LSTM Fit" stroke="#10b981" strokeWidth={2.5} strokeDasharray="5 5" dot={false} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.03)" />
+                    <XAxis dataKey="date" stroke="#64748b" fontClassName="font-mono text-[9px]" />
+                    <YAxis domain={['auto', 'auto']} stroke="#64748b" fontClassName="font-mono text-[9px]" />
+                    <Tooltip contentStyle={{ backgroundColor: 'rgba(13, 20, 38, 0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', color: '#f8fafc', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }} />
+                    <Legend wrapperStyle={{ paddingTop: '15px', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
+                    <Line type="monotone" dataKey="actual" name="Actual Trade Price" stroke="#22d3ee" strokeWidth={3} dot={false} activeDot={{ r: 6, fill: '#22d3ee', stroke: '#060913', strokeWidth: 2 }} />
+                    <Line type="monotone" dataKey="predicted" name="LSTM Model Fit" stroke="#34d399" strokeWidth={2.5} strokeDasharray="4 4" dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -392,15 +392,15 @@ export default function StockAnalysis({
                 <AreaChart data={prediction.predicted_prices} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.25}/>
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#34d399" stopOpacity={0.25}/>
+                      <stop offset="95%" stopColor="#22d3ee" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" className="dark:stroke-slate-800/40" />
-                  <XAxis dataKey="date" stroke="#94a3b8" />
-                  <YAxis domain={['auto', 'auto']} stroke="#94a3b8" />
-                  <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '12px', color: '#f8fafc' }} />
-                  <Area type="monotone" dataKey="price" name="AI Price" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorPrice)" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.03)" />
+                  <XAxis dataKey="date" stroke="#64748b" fontClassName="font-mono text-[9px]" />
+                  <YAxis domain={['auto', 'auto']} stroke="#64748b" fontClassName="font-mono text-[9px]" />
+                  <Tooltip contentStyle={{ backgroundColor: 'rgba(13, 20, 38, 0.95)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', color: '#f8fafc', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }} />
+                  <Area type="monotone" dataKey="price" name="LSTM Projected Future Value" stroke="#34d399" strokeWidth={3} fillOpacity={1} fill="url(#colorPrice)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

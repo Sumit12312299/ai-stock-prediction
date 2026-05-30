@@ -3,7 +3,6 @@ import {
   TrendingUp, 
   TrendingDown, 
   DollarSign, 
-  Activity, 
   ArrowRight, 
   Cpu, 
   HelpCircle, 
@@ -33,88 +32,99 @@ export default function Overview({
   ];
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-8 animate-fade-slide-up bg-transparent">
+      
       {/* Upper Title Header */}
-      <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          System Command Center
-        </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5">
-          Real-time trading analytics, LSTM sequence forecasting pipelines, and sentiment ledgers.
-        </p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-wider text-white uppercase font-display bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
+            System Command Center
+          </h1>
+          <p className="text-xs text-cyan-400 font-semibold tracking-wider uppercase mt-1">
+            Real-time Trading Terminals & LSTM Deep-Learning Forecasting Kernels
+          </p>
+        </div>
+        
+        {/* Dynamic active status pill */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 text-xs font-mono font-bold animate-pulse">
+          <span className="w-2 h-2 rounded-full bg-emerald-400" />
+          <span>Core AI Pipelines Active</span>
+        </div>
       </div>
 
       {/* Animated Statistics Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         
-        {/* Card 1: Portfolio Value */}
-        <div className="glass-panel p-6 border border-slate-100 dark:border-slate-800 hover:scale-[1.02] transition-transform duration-200">
+        {/* Card 1: Portfolio Value - Cyan glow */}
+        <div className="glass-panel p-6 rounded-2xl hover:scale-[1.02] transition-all bg-slate-950/40 backdrop-blur-md relative border border-white/5 card-glow-cyan">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Portfolio Value</span>
-            <div className="p-2.5 bg-blue-500/10 rounded-xl text-blue-500 border border-blue-500/20">
-              <DollarSign className="h-5 w-5" />
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Net Portfolio Value</span>
+            <div className="p-2.5 bg-cyan-500/10 rounded-xl text-cyan-400 border border-cyan-500/20">
+              <DollarSign className="h-4 w-4" />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight">
+          <h3 className="text-2xl font-black text-white font-mono leading-tight tracking-wide">
             ${totals.total_current_value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </h3>
-          <p className="text-xs text-slate-400 mt-2 font-medium">
-            Invested basis: <span className="text-slate-600 dark:text-slate-300 font-semibold">${totals.total_invested.toFixed(2)}</span>
+          <p className="text-[10px] text-slate-500 mt-2">
+            Invested Basis: <span className="text-cyan-400/90 font-semibold font-mono">${totals.total_invested.toFixed(2)}</span>
           </p>
         </div>
 
-        {/* Card 2: Profit / Loss */}
-        <div className="glass-panel p-6 border border-slate-100 dark:border-slate-800 hover:scale-[1.02] transition-transform duration-200">
+        {/* Card 2: Profit / Loss - Emerald/Red glow */}
+        <div className={`glass-panel p-6 rounded-2xl hover:scale-[1.02] transition-all bg-slate-950/40 backdrop-blur-md relative border border-white/5 ${
+          totals.overall_profit_loss >= 0 ? 'card-glow-emerald' : 'card-glow-cyan'
+        }`}>
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Overall Return</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Overall Margin Return</span>
             <div className={`p-2.5 rounded-xl border ${
               totals.overall_profit_loss >= 0 
-                ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
-                : 'bg-red-500/10 text-red-500 border-red-500/20'
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+                : 'bg-red-500/10 text-red-400 border-red-500/20'
             }`}>
-              {totals.overall_profit_loss >= 0 ? <TrendingUp className="h-5 w-5" /> : <TrendingDown className="h-5 w-5" />}
+              {totals.overall_profit_loss >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
             </div>
           </div>
-          <h3 className={`text-2xl font-bold leading-tight ${totals.overall_profit_loss >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+          <h3 className={`text-2xl font-black font-mono leading-tight tracking-wide ${totals.overall_profit_loss >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
             {totals.overall_profit_loss >= 0 ? '+' : ''}
             ${totals.overall_profit_loss.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </h3>
-          <p className={`text-xs mt-2 font-semibold flex items-center gap-1 ${
-            totals.overall_profit_loss >= 0 ? 'text-emerald-500' : 'text-red-500'
+          <p className={`text-[10px] mt-2 font-bold flex items-center gap-1 ${
+            totals.overall_profit_loss >= 0 ? 'text-emerald-400' : 'text-red-400'
           }`}>
-            {totals.overall_profit_loss_percent >= 0 ? '▲' : '▼'} {Math.abs(totals.overall_profit_loss_percent).toFixed(2)}% overall margin
+            {totals.overall_profit_loss_percent >= 0 ? '▲' : '▼'} {Math.abs(totals.overall_profit_loss_percent).toFixed(2)}% ROI Margin
           </p>
         </div>
 
-        {/* Card 3: Watchlist Counters */}
-        <div className="glass-panel p-6 border border-slate-100 dark:border-slate-800 hover:scale-[1.02] transition-transform duration-200">
+        {/* Card 3: Watchlist Counters - Purple/Indigo glow */}
+        <div className="glass-panel p-6 rounded-2xl hover:scale-[1.02] transition-all bg-slate-950/40 backdrop-blur-md relative border border-white/5 card-glow-cyan">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Bookmarked Watchlist</span>
-            <div className="p-2.5 bg-violet-500/10 rounded-xl text-violet-500 border border-violet-500/20">
-              <Layers className="h-5 w-5" />
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Watchlist</span>
+            <div className="p-2.5 bg-indigo-500/10 rounded-xl text-indigo-400 border border-indigo-500/20">
+              <Layers className="h-4 w-4" />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight">
-            {watchlistCount} Tickers
+          <h3 className="text-2xl font-black text-white font-mono leading-tight tracking-wide">
+            {watchlistCount} Equities
           </h3>
-          <p className="text-xs text-slate-400 mt-2 font-medium">
-            Active tracking triggers enabled
+          <p className="text-[10px] text-indigo-400/90 mt-2 font-semibold tracking-wider uppercase">
+            Tracking channels active
           </p>
         </div>
 
-        {/* Card 4: AI Network Accuracy */}
-        <div className="glass-panel p-6 border border-slate-100 dark:border-slate-800 hover:scale-[1.02] transition-transform duration-200">
+        {/* Card 4: AI Network Accuracy - Amber glow */}
+        <div className="glass-panel p-6 rounded-2xl hover:scale-[1.02] transition-all bg-slate-950/40 backdrop-blur-md relative border border-white/5 card-glow-cyan">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">AI Neural Status</span>
-            <div className="p-2.5 bg-amber-500/10 rounded-xl text-amber-500 border border-amber-500/20">
-              <Cpu className="h-5 w-5" />
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">LSTM Neural Engine</span>
+            <div className="p-2.5 bg-amber-500/10 rounded-xl text-amber-400 border border-amber-500/20">
+              <Cpu className="h-4 w-4" />
             </div>
           </div>
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight">
-            LSTM & RNN Cores
+          <h3 className="text-2xl font-black text-white leading-tight tracking-wide font-display">
+            Dual Forecasting
           </h3>
-          <p className="text-xs text-slate-400 mt-2 font-medium">
-            Dynamic sequence lookback: <span className="text-amber-500 font-bold">30 Days</span>
+          <p className="text-[10px] text-slate-500 mt-2">
+            Dynamic sequence basis: <span className="text-amber-400 font-bold font-mono">30 Days</span>
           </p>
         </div>
 
@@ -124,36 +134,38 @@ export default function Overview({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Hotlist Cards */}
-        <div className="md:col-span-2 glass-panel p-6 border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
+        <div className="md:col-span-2 glass-panel p-8 rounded-3xl border border-white/5 bg-slate-950/40 backdrop-blur-md flex flex-col justify-between card-glow-cyan">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
-              Market Hotlist Tickers
-            </h2>
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-base font-bold text-white uppercase tracking-wider font-display">
+                Real-Time Hotlist Feed
+              </h2>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">INDEX DATA</span>
+            </div>
             <p className="text-xs text-slate-400 mb-6">
-              Quick shortcut widgets to trigger deep AI sequence predictions for market giants.
+              Launch instantaneous time-series LSTM futures forecasts for these blue-chip industry leaders.
             </p>
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {hotlist.map((stock) => (
                 <div 
                   key={stock.ticker} 
-                  className="p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/80 rounded-2xl flex items-center justify-between hover:border-emerald-500 dark:hover:border-emerald-500/60 transition-all group"
+                  className="p-4 bg-slate-900/40 border border-white/5 rounded-2xl flex items-center justify-between hover:border-cyan-400/40 hover:bg-slate-900/70 transition-all group cursor-pointer"
+                  onClick={() => onAnalyzeStock(stock.ticker)}
                 >
-                  <div>
-                    <span className="font-bold text-slate-950 dark:text-white text-base block">{stock.ticker}</span>
-                    <span className="text-xs text-slate-400 truncate max-w-[130px] inline-block">{stock.name}</span>
+                  <div className="flex-1 min-w-0 pr-2">
+                    <span className="font-bold text-white text-base block font-mono">{stock.ticker}</span>
+                    <span className="text-[10px] text-slate-500 truncate block">{stock.name}</span>
                   </div>
                   <div className="text-right">
-                    <span className="font-semibold text-slate-800 dark:text-slate-100 text-sm block">${stock.price.toFixed(2)}</span>
-                    <span className={`text-xs font-semibold ${stock.isUp ? 'text-emerald-500' : 'text-red-500'}`}>
+                    <span className="font-bold text-white text-sm block font-mono">${stock.price.toFixed(2)}</span>
+                    <span className={`text-[10px] font-bold ${stock.isUp ? 'text-emerald-400' : 'text-red-400'}`}>
                       {stock.change}
                     </span>
                   </div>
-                  <button 
-                    onClick={() => onAnalyzeStock(stock.ticker)}
-                    className="p-2 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-white rounded-xl border border-emerald-500/20 transition-all opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 ml-2"
-                  >
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
+                  <div className="p-1.5 bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-white rounded-xl border border-cyan-500/20 transition-all ml-3 opacity-60 group-hover:opacity-100 group-hover:scale-105">
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </div>
                 </div>
               ))}
             </div>
@@ -161,31 +173,34 @@ export default function Overview({
         </div>
 
         {/* Technical Formula Info Card */}
-        <div className="glass-panel p-6 border border-slate-100 dark:border-slate-800 bg-gradient-to-br from-emerald-500/[0.02] to-blue-500/[0.02]">
-          <div className="flex items-center gap-2 mb-4">
-            <HelpCircle className="h-5 w-5 text-emerald-500 shrink-0" />
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              Core Technical Formulas
+        <div className="glass-panel p-8 rounded-3xl border border-white/5 bg-slate-950/40 backdrop-blur-md flex flex-col relative card-glow-emerald">
+          <div className="flex items-center gap-2.5 mb-2">
+            <HelpCircle className="h-5 w-5 text-emerald-400 shrink-0" />
+            <h2 className="text-base font-bold text-white uppercase tracking-wider font-display">
+              Formula Blueprint
             </h2>
           </div>
+          <p className="text-xs text-slate-400 mb-6">
+            Underlying quantitative mathematical layers driving secondary predictions.
+          </p>
           
-          <div className="space-y-4 text-xs text-slate-500 dark:text-slate-400">
+          <div className="space-y-4 text-xs">
             {/* Moving Average */}
-            <div className="p-3 bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80 rounded-xl">
-              <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Simple Moving Average (SMA)</span>
-              <p className="mb-2 italic text-[10px] leading-relaxed">Smoothing trading datasets to isolate trends:</p>
-              <div className="p-2 bg-slate-100 dark:bg-slate-900 rounded-lg text-center font-mono text-[11px] text-slate-700 dark:text-slate-300 font-bold border border-slate-200/40 dark:border-slate-800/40">
-                SMA = (P₁ + P₂ + ... + P_n) / n
+            <div className="p-4 bg-slate-900/60 border border-white/5 rounded-2xl">
+              <span className="font-bold text-slate-200 block mb-1 font-sans">Simple Moving Average (SMA)</span>
+              <p className="mb-3 text-[10px] text-slate-500 leading-relaxed">Isolates high-frequency volatility noise:</p>
+              <div className="p-2.5 bg-slate-950/60 rounded-xl text-center font-mono text-[10px] text-cyan-400 border border-white/5 font-semibold">
+                SMA_k = 1/k * Σ (P_t-i)
               </div>
             </div>
 
             {/* Linear Regression */}
-            <div className="p-3 bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80 rounded-xl">
-              <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Linear Regression Equations</span>
-              <p className="mb-2 italic text-[10px] leading-relaxed">Finding least-squares price lines (y = mx + c):</p>
-              <div className="space-y-1.5 font-mono text-[10px] text-slate-700 dark:text-slate-300 border border-slate-200/40 dark:border-slate-800/40 p-2 bg-slate-100 dark:bg-slate-900 rounded-lg">
+            <div className="p-4 bg-slate-900/60 border border-white/5 rounded-2xl">
+              <span className="font-bold text-slate-200 block mb-1 font-sans">Linear Trend Forecasting</span>
+              <p className="mb-3 text-[10px] text-slate-500 leading-relaxed">Computes optimal linear slope parameters:</p>
+              <div className="space-y-1.5 font-mono text-[9px] text-slate-400 border border-white/5 p-2 bg-slate-950/60 rounded-xl">
                 <div className="text-center font-bold">Slope (m) = [nΣxy - (Σx)(Σy)] / [nΣx² - (Σx)²]</div>
-                <div className="text-center font-bold">Intercept (c) = (Σy - mΣx) / n</div>
+                <div className="text-center font-bold">Constant (c) = (Σy - mΣx) / n</div>
               </div>
             </div>
           </div>
@@ -194,39 +209,39 @@ export default function Overview({
       </div>
 
       {/* Bottom Transactions History log */}
-      <div className="glass-panel p-6 border border-slate-100 dark:border-slate-800">
-        <div className="flex items-center justify-between mb-6">
+      <div className="glass-panel p-8 rounded-3xl border border-white/5 bg-slate-950/40 backdrop-blur-md card-glow-cyan">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              Recent Transactions History
+            <h2 className="text-base font-bold text-white uppercase tracking-wider font-display">
+              Transaction Execution Log
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Chronological log of buy and sell ledger executions.
+            <p className="text-xs text-slate-400 mt-1">
+              Ledger registering buy and sell positions simulated on active server databases.
             </p>
           </div>
           <button 
             onClick={() => setActiveTab('portfolio')}
-            className="text-xs font-semibold text-emerald-500 hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 uppercase tracking-wider border border-cyan-400/20 bg-cyan-500/5 px-3.5 py-1.5 rounded-xl hover:bg-cyan-500/10 transition-all cursor-pointer"
           >
-            <span>Open Portfolio Manager</span>
+            <span>Open Ledger</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </button>
         </div>
 
         {transactions.length === 0 ? (
-          <div className="py-8 text-center text-slate-400 text-sm italic">
-            No transactions executed yet. Open the portfolio to simulate buying and selling stocks.
+          <div className="py-10 text-center text-slate-500 text-xs italic">
+            No transactions executed yet. Open the Portfolio Manager to simulate trading positions.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm border-collapse">
+          <div className="overflow-x-auto scrollbar-thin">
+            <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-100 dark:border-slate-800/60 pb-3 text-slate-400 font-semibold text-xs uppercase tracking-wider">
-                  <th className="py-3 pr-4">Executed Date</th>
-                  <th className="py-3 px-4">Equity Asset</th>
+                <tr className="border-b border-white/5 pb-3 text-slate-500 font-semibold uppercase tracking-[0.15em] text-[10px]">
+                  <th className="py-3 pr-4">Timestamp</th>
+                  <th className="py-3 px-4">Equity Symbol</th>
                   <th className="py-3 px-4">Action</th>
-                  <th className="py-3 px-4">Volume (Shares)</th>
-                  <th className="py-3 px-4">Price (USD)</th>
+                  <th className="py-3 px-4">Shares Count</th>
+                  <th className="py-3 px-4">Execution Price</th>
                   <th className="py-3 pl-4 text-right">Aggregate Cost</th>
                 </tr>
               </thead>
@@ -234,31 +249,31 @@ export default function Overview({
                 {transactions.slice(0, 5).map((tx) => (
                   <tr 
                     key={tx.id || tx._id} 
-                    className="border-b border-slate-100 dark:border-slate-800/40 last:border-0 hover:bg-slate-50/50 dark:hover:bg-slate-950/20 transition-colors"
+                    className="border-b border-white/[0.03] last:border-0 hover:bg-white/[0.02] transition-colors"
                   >
-                    <td className="py-3.5 pr-4 text-slate-400 font-medium text-xs">
+                    <td className="py-3.5 pr-4 text-slate-500 font-mono text-[10px]">
                       {new Date(tx.timestamp).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
+                    <td className="py-3.5 px-4 font-bold text-white font-mono">
                       {tx.ticker}
-                      <span className="text-[10px] text-slate-400 font-medium ml-2 font-normal hidden sm:inline">{tx.company_name}</span>
+                      <span className="text-[9px] text-slate-500 font-normal ml-2 hidden sm:inline">{tx.company_name}</span>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${
+                      <span className={`text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-widest ${
                         tx.transaction_type === 'BUY' 
-                          ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/10' 
-                          : 'bg-red-500/10 text-red-500 border border-red-500/10'
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                          : 'bg-red-500/10 text-red-400 border border-red-500/20'
                       }`}>
                         {tx.transaction_type}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 font-semibold text-slate-700 dark:text-slate-300">
+                    <td className="py-3.5 px-4 font-semibold text-slate-300 font-mono">
                       {tx.shares.toFixed(2)}
                     </td>
-                    <td className="py-3.5 px-4 font-semibold text-slate-700 dark:text-slate-300">
+                    <td className="py-3.5 px-4 font-semibold text-slate-300 font-mono">
                       ${tx.price.toFixed(2)}
                     </td>
-                    <td className="py-3.5 pl-4 text-right font-bold text-slate-950 dark:text-white">
+                    <td className="py-3.5 pl-4 text-right font-black text-white font-mono">
                       ${tx.total_cost.toFixed(2)}
                     </td>
                   </tr>

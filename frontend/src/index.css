@@ -6,42 +6,88 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-800 font-sans transition-colors duration-300 antialiased;
-  }
-  body.dark {
-    @apply bg-slate-950 text-slate-100;
+    background-color: #060913;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.03) 0%, transparent 60%);
+    @apply text-slate-200 font-sans transition-colors duration-300 antialiased min-h-screen;
+    font-family: 'Outfit', sans-serif;
   }
 }
 
 /* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  background: rgba(15, 23, 42, 0.3);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-800 rounded-full transition-colors duration-200;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  border: 2px solid rgba(15, 23, 42, 0.5);
+  transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400 dark:bg-slate-700;
+  background: rgba(6, 182, 212, 0.3);
 }
 
 /* Glassmorphism Card Utilities */
 .glass-panel {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  @apply bg-white/70 shadow-glass rounded-2xl;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(13, 20, 38, 0.6);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.dark .glass-panel {
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  @apply bg-slate-900/70 shadow-glass-dark;
+.glass-panel:hover {
+  border-color: rgba(6, 182, 212, 0.2);
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(6, 182, 212, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Glowing Neon Text Gradients */
+.text-gradient-neon {
+  background: linear-gradient(135deg, #22d3ee 0%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-violet {
+  background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Neon Buttons */
+.btn-neon {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-neon:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 25px rgba(6, 182, 212, 0.4),
+    0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.btn-neon:active {
+  transform: translateY(0);
 }
 
 /* Pulsing Ticker Nodes */
@@ -49,10 +95,12 @@
   0%, 100% {
     transform: scale(1);
     opacity: 1;
+    filter: drop-shadow(0 0 2px rgba(6, 182, 212, 0.4));
   }
   50% {
-    transform: scale(1.15);
-    opacity: 0.7;
+    transform: scale(1.1);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.8));
   }
 }
 
@@ -63,7 +111,7 @@
 /* Voice Assistant Recording Wave Animation */
 @keyframes wave-grow {
   0%, 100% {
-    transform: scaleY(0.3);
+    transform: scaleY(0.35);
   }
   50% {
     transform: scaleY(1);
@@ -72,16 +120,98 @@
 
 .voice-bar {
   display: inline-block;
-  width: 4px;
-  height: 24px;
-  margin: 0 2px;
-  background-color: #3b82f6;
-  border-radius: 2px;
+  width: 5px;
+  height: 28px;
+  margin: 0 3px;
+  background-color: #22d3ee;
+  border-radius: 9999px;
   transform-origin: bottom;
   animation: wave-grow 1s ease-in-out infinite;
 }
 
-.voice-bar:nth-child(2) { animation-delay: 0.15s; background-color: #60a5fa; }
-.voice-bar:nth-child(3) { animation-delay: 0.3s; background-color: #2563eb; }
-.voice-bar:nth-child(4) { animation-delay: 0.45s; background-color: #1d4ed8; }
-.voice-bar:nth-child(5) { animation-delay: 0.6s; background-color: #3b82f6; }
+.voice-bar:nth-child(2) { animation-delay: 0.15s; background-color: #34d399; }
+.voice-bar:nth-child(3) { animation-delay: 0.3s; background-color: #6366f1; }
+.voice-bar:nth-child(4) { animation-delay: 0.45s; background-color: #a78bfa; }
+.voice-bar:nth-child(5) { animation-delay: 0.6s; background-color: #22d3ee; }
+
+/* Custom Glowing Radial Points for Layout Cards */
+.card-glow-cyan {
+  position: relative;
+}
+.card-glow-cyan::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.card-glow-emerald {
+  position: relative;
+}
+.card-glow-emerald::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* --- PORTFOLIO VISUAL STYLES ADAPTED --- */
+
+/* Interactive Mouse Tracker Glow */
+.cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.12) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  border-radius: 50%;
+  transition: width 0.3s, height 0.3s;
+}
+
+/* Floating Animations for Space Backlight Blobs */
+@keyframes float-blob-1 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(40px, -60px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.95); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes float-blob-2 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-60px, 50px) scale(0.9); }
+  66% { transform: translate(50px, -40px) scale(1.15); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob-1 {
+  animation: float-blob-1 25s ease-in-out infinite;
+}
+
+.animate-blob-2 {
+  animation: float-blob-2 18s ease-in-out infinite;
+}
+
+/* Bouncing Intro Screen Animations */
+@keyframes fade-slide-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-slide-up {
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
