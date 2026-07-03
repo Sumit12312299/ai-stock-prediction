@@ -7,6 +7,7 @@ import StockAnalysis from './components/StockAnalysis';
 import PortfolioManager from './components/PortfolioManager';
 import WatchlistManager from './components/WatchlistManager';
 import ChatbotDrawer from './components/ChatbotDrawer';
+import Backtester from './components/Backtester';
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -319,6 +320,13 @@ export default function App() {
                   onAnalyzeStock={handleSearchStock}
                   voiceQuery={voiceChatQuery}
                   clearVoiceQuery={() => setVoiceChatQuery('')}
+                />
+              )}
+
+              {activeTab === 'backtest' && (
+                <Backtester 
+                  token={session.token}
+                  defaultTicker={selectedStock}
                 />
               )}
 

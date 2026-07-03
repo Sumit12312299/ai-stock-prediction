@@ -180,6 +180,48 @@ class LSTMPredictionEngine:
         
         return predicted_prices, padded_fitted, metrics
 
+    def generate_monte_carlo_simulation(self, data: np.ndarray, days_to_predict: int, num_simulations: int = 100) -> Dict[str, Any]:
+        """
+        Generate Monte Carlo simulations using Geometric Brownian Motion (GBM).
+        """
+        # Calculate daily log returns
+        log_returns = np.diff(np.log(data))
+        mu = float(np.mean(log_returns)) if len(log_returns) > 0 else 0.0002
+        sigma = float(np.std(log_returns)) if len(log_returns) > 0 else 0.015
+        
+        # If standard deviation is 0 (flat data), set a default
+        if sigma == 0:
+            sigma = 0.01
+            
+        last_price = float(data[-1])
+        
+        # Array to store simulations
+        simulations = np.zeros((num_simulations, days_to_predict))
+        
+        for sim in range(num_simulations):
+            current_price = last_price
+            for day in range(days_to_predict):
+                z = np.random.normal()
+                # GBM equation step
+                next_price = current_price * np.exp((mu - 0.5 * sigma**2) + sigma * z)
+                simulations[sim, day] = next_price
+                current_price = next_price
+                
+        # Calculate percentiles
+        lower_bound = np.percentile(simulations, 10, axis=0)
+        upper_bound = np.percentile(simulations, 90, axis=0)
+        median_bound = np.percentile(simulations, 50, axis=0)
+        
+        # Take 5 sample paths
+        sample_paths = simulations[:5]
+        
+        return {
+            "upper": upper_bound,
+            "lower": lower_bound,
+            "median": median_bound,
+            "samples": sample_paths
+        }
+
     def predict(self, ticker: str, company_name: str, historical_df: pd.DataFrame, days_to_predict: int = 7) -> Dict[str, Any]:
         """
         Predict future stock prices and calculate evaluations.
@@ -234,6 +276,24 @@ class LSTMPredictionEngine:
                 "predicted": round(float(fitted), 2)
             })
 
+        # Generate Monte Carlo Simulations
+        mc_results = self.generate_monte_carlo_simulation(prices, days_to_predict, num_simulations=100)
+        
+        formatted_mc_upper = []
+        formatted_mc_lower = []
+        formatted_mc_median = []
+        formatted_mc_samples = [[] for _ in range(5)]
+        
+        for idx, d in enumerate(future_dates):
+            formatted_mc_upper.append({"date": d, "price": round(float(mc_results["upper"][idx]), 2)})
+            formatted_mc_lower.append({"date": d, "price": round(float(mc_results["lower"][idx]), 2)})
+            formatted_mc_median.append({"date": d, "price": round(float(mc_results["median"][idx]), 2)})
+            for s_idx in range(5):
+                formatted_mc_samples[s_idx].append({
+                    "date": d,
+                    "price": round(float(mc_results["samples"][s_idx][idx]), 2)
+                })
+
         # Calculate Prediction Confidence Score
         # Formula combines R2 score and price standard deviation
         r2 = metrics["r2_score"]
@@ -270,7 +330,7 @@ class LSTMPredictionEngine:
                 f"The stock is consolidating. AI predicts a minor fluctuation of {pct_return:+.2f}% "
                 "which indicates low momentum. Maintaining current positions and awaiting a clear breakout is recommended."
             )
-
+ 
         return {
             "ticker": ticker,
             "company_name": company_name,
@@ -284,7 +344,11 @@ class LSTMPredictionEngine:
             "moving_average_200": round(ma_200, 2),
             "r2_score": round(metrics["r2_score"], 4),
             "rmse": round(metrics["rmse"], 4),
-            "mae": round(metrics["mae"], 4)
+            "mae": round(metrics["mae"], 4),
+            "monte_carlo_upper": formatted_mc_upper,
+            "monte_carlo_lower": formatted_mc_lower,
+            "monte_carlo_median": formatted_mc_median,
+            "monte_carlo_samples": formatted_mc_samples
         }
 
 lstm_prediction_engine = LSTMPredictionEngine()

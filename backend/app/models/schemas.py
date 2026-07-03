@@ -98,6 +98,10 @@ class StockPredictionResponse(BaseModel):
     r2_score: float
     rmse: float
     mae: float
+    monte_carlo_upper: Optional[List[Dict[str, Any]]] = None
+    monte_carlo_lower: Optional[List[Dict[str, Any]]] = None
+    monte_carlo_median: Optional[List[Dict[str, Any]]] = None
+    monte_carlo_samples: Optional[List[List[Dict[str, Any]]]] = None
 
 # --- Stock Data & News Schemas ---
 
@@ -148,3 +152,32 @@ class VoiceAssistantResponse(BaseModel):
     spoken_text: str
     action_type: str  # "SEARCH", "PREDICT", "PORTFOLIO", "WATCHLIST", "CHAT", "UNKNOWN"
     action_payload: Optional[Dict[str, Any]] = None
+
+
+# --- Backtesting Schemas ---
+
+class BacktestRequest(BaseModel):
+    ticker: str = Field(..., min_length=1, max_length=10)
+    strategy: str = Field(..., pattern="^(RSI|SMA_CROSSOVER|LSTM_AI)$")
+    initial_capital: float = Field(default=10000.0, gt=0)
+    period: str = Field(default="1y", pattern="^(1mo|3mo|6mo|1y|2y|5y)$")
+    rsi_low: Optional[float] = Field(default=30.0, ge=0, le=100)
+    rsi_high: Optional[float] = Field(default=70.0, ge=0, le=100)
+    sma_fast: Optional[int] = Field(default=20, ge=1)
+    sma_slow: Optional[int] = Field(default=50, ge=1)
+
+class BacktestResponse(BaseModel):
+    ticker: str
+    strategy: str
+    initial_capital: float
+    final_value: float
+    total_return_pct: float
+    buy_and_hold_return_pct: float
+    total_trades: int
+    winning_trades: int
+    win_rate_pct: float
+    max_drawdown_pct: float
+    sharpe_ratio: float
+    equity_curve: List[Dict[str, Any]]  # List of {"date": str, "portfolio_value": float, "stock_price": float}
+    trades: List[Dict[str, Any]]  # List of {"type": str, "date": str, "price": float, "shares": float, "value": float}
+

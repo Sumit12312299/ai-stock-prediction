@@ -6,7 +6,8 @@ import {
   Bookmark, 
   MessageSquare, 
   LogOut, 
-  TrendingUp 
+  TrendingUp,
+  Cpu
 } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab, onLogout, username }) {
@@ -15,6 +16,7 @@ export default function Sidebar({ activeTab, setActiveTab, onLogout, username })
     { id: 'analysis', name: 'Stock AI Forecaster', icon: LineChart },
     { id: 'portfolio', name: 'Portfolio Ledger', icon: Briefcase },
     { id: 'watchlist', name: 'Saved Watchlist', icon: Bookmark },
+    { id: 'backtest', name: 'Strategy Backtester', icon: Cpu },
     { id: 'chatbot', name: 'AI Investment Chat', icon: MessageSquare },
   ];
 

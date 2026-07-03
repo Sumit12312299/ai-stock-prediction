@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from fastapi.responses import StreamingResponse
-from backend.app.models.schemas import StockSearchSuggestion, StockDetailsResponse, StockPredictionResponse
+from backend.app.models.schemas import StockSearchSuggestion, StockDetailsResponse, StockPredictionResponse, BacktestRequest, BacktestResponse
 from backend.app.services.stock_service import stock_service
 from backend.app.services.lstm_service import lstm_prediction_engine
 from backend.app.services.pdf_service import pdf_report_service
+from backend.app.services.backtesting_service import backtesting_service
 from backend.app.routers.deps import get_current_user
+from typing import Dict
 from typing import List, Any
 import datetime
 
@@ -102,4 +104,33 @@ async def export_pdf_report(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Could not generate PDF report for '{ticker_clean}': {str(e)}"
+        )
+
+@router.post("/backtest", response_model=BacktestResponse)
+async def run_strategy_backtest(
+    payload: BacktestRequest,
+    current_user: Dict[str, Any] = Depends(get_current_user)
+) -> Any:
+    """Run historical strategy backtest (RSI, SMA Crossover, or LSTM AI) on a ticker."""
+    try:
+        results = backtesting_service.run_backtest(
+            ticker=payload.ticker.upper().strip(),
+            strategy=payload.strategy,
+            initial_capital=payload.initial_capital,
+            period=payload.period,
+            rsi_low=payload.rsi_low if payload.rsi_low is not None else 30.0,
+            rsi_high=payload.rsi_high if payload.rsi_high is not None else 70.0,
+            sma_fast=payload.sma_fast if payload.sma_fast is not None else 20,
+            sma_slow=payload.sma_slow if payload.sma_slow is not None else 50
+        )
+        return results
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Backtesting execution failed: {str(e)}"
         )
