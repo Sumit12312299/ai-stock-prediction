@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Mic, Sun, Moon, Volume2, X, AlertTriangle, TrendingUp } from 'lucide-react';
+import SiriWaveform from './SiriWaveform';
 
 export default function Header({ 
   token, 
@@ -308,15 +309,9 @@ export default function Header({
               Microphone input active
             </p>
 
-            {/* Bouncing Audio Wave Visual */}
+            {/* Siri-like Waveform Visualizer */}
             {!assistantReply && !voiceError && (
-              <div className="flex justify-center items-end h-8 mb-8">
-                <div className="voice-bar"></div>
-                <div className="voice-bar"></div>
-                <div className="voice-bar"></div>
-                <div className="voice-bar"></div>
-                <div className="voice-bar"></div>
-              </div>
+              <SiriWaveform isListening={isListening} />
             )}
 
             {assistantReply && (
