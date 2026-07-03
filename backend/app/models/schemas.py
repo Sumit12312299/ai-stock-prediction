@@ -134,6 +134,7 @@ class StockDetailsResponse(BaseModel):
     chart_data: List[Dict[str, Any]]
     news: List[NewsSentimentItem]
     sentiment_summary: Dict[str, Any] # e.g. {"overall": "POSITIVE", "score": 0.45}
+    sentiment_trend: Optional[List[Dict[str, Any]]] = None
 
 
 # --- Interactive Features ---
